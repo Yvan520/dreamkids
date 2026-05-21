@@ -364,7 +364,8 @@ footer p { font-size: 0.85rem; color: var(--text-soft); }
       <a href="#showcase">作品展示</a>
       <a href="#pricing">定价</a>
       <a href="#faq">常见问题</a>
-      <a href="#waitlist" class="nav-cta">加入候补</a>
+      <a href="#waitlist">候补名单</a>
+      <a href="https://render.com" target="_blank" class="nav-cta" id="tryNowLink">✨ 立即创作</a>
     </div>
   </div>
 </nav>
@@ -485,6 +486,23 @@ footer p { font-size: 0.85rem; color: var(--text-soft); }
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- Try It Live -->
+<section class="section" style="background:linear-gradient(135deg, #F5F0FF, #FFF7ED);padding:80px 0;">
+  <div class="container text-center">
+    <div class="section-label">在线创作</div>
+    <h2>自己动手，即刻生成</h2>
+    <p class="section-desc" style="margin-bottom:24px;">
+      输入故事创意，AI 自动写故事、画插图、导出 PDF。完全免费，无需注册。
+    </p>
+    <a href="https://render.com" target="_blank" id="tryNowBtn" class="btn btn-primary" style="font-size:1.2rem;padding:18px 48px;">
+      🚀 打开绘本生成器
+    </a>
+    <p style="margin-top:16px;font-size:0.85rem;color:var(--text-light);">
+      部署完成后替换此链接 · 详见 DEPLOY-STORYCRAFT.md
+    </p>
   </div>
 </section>
 
@@ -686,6 +704,17 @@ function showToast(msg, isError = false) {
   requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('show')));
   setTimeout(() => t.classList.remove('show'), 4000);
 }
+
+// Deployment URL - 部署后替换这里
+const APP_URL = ''; // 填入部署后的 URL，例如 'https://dreamkids-storycraft.onrender.com'
+
+// 更新所有指向生成器的链接
+document.addEventListener('DOMContentLoaded', function() {
+  if (APP_URL) {
+    document.getElementById('tryNowLink').href = APP_URL;
+    document.getElementById('tryNowBtn').href = APP_URL;
+  }
+});
 
 // Form submission
 const FORM_KEY = 'dreamkids_waitlist';
