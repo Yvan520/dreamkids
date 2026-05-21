@@ -7,7 +7,8 @@ load_dotenv()
 API_KEY = os.getenv("API_KEY", "")
 API_ENDPOINT = os.getenv("API_ENDPOINT", "https://dashscope.aliyuncs.com/compatible-mode/v1")
 
-# 文本生成配置
+# 文本生成配置（可独立于图片设置不同的 API Key）
+TEXT_API_KEY = os.getenv("TEXT_API_KEY", API_KEY)
 TEXT_MODEL = os.getenv("TEXT_MODEL", "qwen-plus")
 
 # 图片生成服务选择

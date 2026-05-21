@@ -215,8 +215,8 @@ if generate_story_btn:
         st.error("❌ 请输入故事创意/点子")
     elif not character:
         st.error("❌ 请输入主角名字")
-    elif not API_KEY:
-        st.error("❌ 请先配置 API_KEY（在 .env 文件中）")
+    elif not TEXT_API_KEY and not API_KEY:
+        st.error("❌ 请先配置 API_KEY 或 TEXT_API_KEY（在 .env 文件中）")
     else:
         # 显示进度
         progress_bar = st.progress(0)
@@ -227,7 +227,7 @@ if generate_story_btn:
             status_text.text("正在初始化...")
             progress_bar.progress(10)
 
-            text_gen = TextGenerator(API_KEY, API_ENDPOINT, TEXT_MODEL)
+            text_gen = TextGenerator(TEXT_API_KEY, API_ENDPOINT, TEXT_MODEL)
 
             # 仅生成故事文本（仅中文，不生成图片）
             status_text.text(f"📝 正在根据你的创意生成故事（{num_scenes}个场景，仅中文）...")
@@ -320,7 +320,7 @@ if generate_picture_btn:
 
         try:
             # 步骤1：批量翻译故事
-            text_gen = TextGenerator(API_KEY, API_ENDPOINT, TEXT_MODEL)
+            text_gen = TextGenerator(TEXT_API_KEY, API_ENDPOINT, TEXT_MODEL)
 
             status_text.text(f"🌐 正在翻译故事（{len(st.session_state.scenes)}个场景）...")
             progress_bar.progress(10)
