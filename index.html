@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>童梦工坊 - AI定制儿童绘本 | 每个孩子都值得成为故事里的主角</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #7C3AED;
+  --primary-light: #A78BFA;
+  --primary-dark: #5B21B6;
+  --secondary: #EC4899;
+  --accent: #F59E0B;
+  --bg: #FFFBFA;
+  --bg-alt: #F5F0FF;
+  --text: #1F2937;
+  --text-soft: #6B7280;
+  --text-light: #9CA3AF;
+  --border: #E5E7EB;
+  --card: #FFFFFF;
+  --shadow: 0 4px 24px rgba(124, 58, 237, 0.08);
+  --shadow-lg: 0 20px 60px rgba(124, 58, 237, 0.12);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, .logo-font {
+  font-family: 'Noto Serif SC', 'Georgia', serif;
+}
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+/* Nav */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100; padding: 16px 0;
+  background: rgba(255, 251, 250, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s;
+}
+nav.scrolled { border-color: var(--border); }
+nav .container {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logo { font-size: 1.25rem; font-weight: 800; color: var(--primary); font-family: 'Noto Serif SC', serif; }
+.logo span { color: var(--secondary); }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a {
+  text-decoration: none; color: var(--text); font-size: 0.9rem; font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--primary); }
+.nav-cta {
+  padding: 8px 20px; background: var(--primary); color: white !important;
+  border-radius: 100px; font-weight: 600; font-size: 0.85rem !important;
+}
+.nav-cta:hover { background: var(--primary-dark) !important; }
+
+/* Hero */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 120px 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(124, 58, 237, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(236, 72, 153, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 0%, rgba(245, 158, 11, 0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+.hero-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: center;
+}
+.hero h1 {
+  font-size: 3.2rem; line-height: 1.25; font-weight: 900;
+  margin-bottom: 20px;
+}
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-sub {
+  font-size: 1.1rem; color: var(--text-soft);
+  margin-bottom: 12px; max-width: 480px;
+}
+.hero-price {
+  display: inline-block;
+  background: var(--bg-alt);
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 0.9rem; color: var(--primary-dark); font-weight: 600;
+  margin-bottom: 32px;
+}
+.hero-price s { color: var(--text-light); font-weight: 400; }
+.hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 32px; border-radius: 100px;
+  font-size: 1rem; font-weight: 600;
+  text-decoration: none; cursor: pointer;
+  border: none; transition: all 0.2s;
+}
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(124, 58, 237, 0.3); }
+.btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--border); }
+.btn-outline:hover { border-color: var(--primary); background: var(--bg-alt); }
+.hero-visual { position: relative; padding: 20px; }
+.hero-book {
+  background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+  border-radius: 20px;
+  padding: 40px 32px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  transform: perspective(800px) rotateY(-8deg);
+  transition: transform 0.6s ease;
+}
+.hero-book:hover { transform: perspective(800px) rotateY(-3deg) translateY(-4px); }
+.hero-book-ornament {
+  position: absolute; top: -12px; right: -12px;
+  width: 60px; height: 60px;
+  background: linear-gradient(135deg, var(--secondary), var(--accent));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3);
+}
+.hero-book h3 {
+  font-size: 1.5rem; margin-bottom: 4px; color: #92400E;
+}
+.hero-book .meta {
+  font-size: 0.8rem; color: #A16207; margin-bottom: 20px; font-weight: 500;
+}
+.hero-book .pages {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.hero-book .page {
+  background: rgba(255,255,255,0.7);
+  border-radius: 8px; padding: 12px 16px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 0.85rem; color: #78350F;
+}
+.hero-book .page .icon { font-size: 1.2rem; }
+
+.floating-tag {
+  position: absolute;
+  background: white; padding: 10px 18px;
+  border-radius: 12px; box-shadow: var(--shadow-lg);
+  font-size: 0.85rem; font-weight: 600; animation: float 6s ease-in-out infinite;
+}
+.floating-tag:nth-child(1) { bottom: -10px; left: -30px; animation-delay: 0s; }
+.floating-tag:nth-child(2) { top: 20px; right: -20px; animation-delay: 3s; }
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Sections */
+.section { padding: 100px 0; }
+.section-alt { background: var(--bg-alt); }
+.section-label {
+  display: inline-block;
+  font-size: 0.8rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--primary); margin-bottom: 12px;
+}
+.section h2 {
+  font-size: 2.4rem; font-weight: 900; margin-bottom: 16px;
+}
+.section-desc {
+  font-size: 1.05rem; color: var(--text-soft);
+  max-width: 600px; margin-bottom: 48px;
+}
+.text-center { text-align: center; }
+.text-center .section-desc { margin-left: auto; margin-right: auto; }
+
+/* Steps */
+.steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.step-card {
+  background: var(--card); border-radius: var(--radius);
+  padding: 40px 28px; box-shadow: var(--shadow);
+  text-align: center; transition: all 0.3s;
+}
+.step-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.step-number {
+  width: 56px; height: 56px; margin: 0 auto 20px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 1.3rem; font-weight: 700;
+}
+.step-card h3 { font-size: 1.2rem; margin-bottom: 8px; }
+.step-card p { font-size: 0.9rem; color: var(--text-soft); }
+
+/* Gallery */
+.gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.gallery-item {
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow); transition: all 0.3s; cursor: pointer;
+  background: white;
+}
+.gallery-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.gallery-item .thumb {
+  aspect-ratio: 4/3;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem;
+}
+.gallery-item .info { padding: 16px 20px 20px; }
+.gallery-item .info h4 { font-size: 1rem; margin-bottom: 4px; font-family: 'Noto Serif SC', serif; }
+.gallery-item .info p { font-size: 0.8rem; color: var(--text-soft); }
+.gallery-item .tag {
+  display: inline-block; margin-top: 8px;
+  padding: 3px 10px; border-radius: 100px;
+  font-size: 0.75rem; font-weight: 600;
+}
+.tag-popular { background: #FEF3C7; color: #92400E; }
+.tag-new { background: #DBEAFE; color: #1E40AF; }
+.tag-top { background: #FCE7F3; color: #9D174D; }
+
+/* Pricing */
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: start; }
+.price-card {
+  background: var(--card); border-radius: var(--radius);
+  padding: 40px 28px; box-shadow: var(--shadow);
+  position: relative; transition: all 0.3s;
+  border: 2px solid transparent;
+}
+.price-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.price-card.featured {
+  border-color: var(--primary);
+  box-shadow: 0 20px 60px rgba(124, 58, 237, 0.15);
+}
+.price-card.featured .badge {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white; padding: 4px 20px; border-radius: 100px;
+  font-size: 0.8rem; font-weight: 600;
+}
+.price-card h3 { font-size: 1.2rem; margin-bottom: 8px; }
+.price-card .price {
+  font-size: 2.5rem; font-weight: 800; color: var(--primary);
+  margin-bottom: 4px;
+}
+.price-card .price span { font-size: 1rem; font-weight: 400; color: var(--text-soft); }
+.price-card .price-sub { font-size: 0.85rem; color: var(--text-soft); margin-bottom: 20px; }
+.price-card ul { list-style: none; margin-bottom: 28px; }
+.price-card ul li {
+  padding: 8px 0; font-size: 0.9rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.price-card ul li::before { content: "✓"; color: var(--primary); font-weight: 700; }
+.price-card .btn { width: 100%; justify-content: center; }
+
+/* FAQ */
+.faq-list { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.faq-item {
+  background: var(--card); border-radius: var(--radius-sm);
+  border: 1px solid var(--border); overflow: hidden;
+}
+.faq-q {
+  width: 100%; padding: 20px 24px;
+  display: flex; justify-content: space-between; align-items: center;
+  background: none; border: none; cursor: pointer;
+  font-size: 1rem; font-weight: 600; color: var(--text);
+  text-align: left; font-family: inherit;
+  transition: color 0.2s;
+}
+.faq-q:hover { color: var(--primary); }
+.faq-q .icon { transition: transform 0.3s; font-size: 0.8rem; }
+.faq-item.open .faq-q .icon { transform: rotate(180deg); }
+.faq-a {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0 24px;
+}
+.faq-item.open .faq-a {
+  max-height: 300px;
+  padding: 0 24px 20px;
+}
+.faq-a p { font-size: 0.9rem; color: var(--text-soft); line-height: 1.7; }
+
+/* Waitlist Form */
+.waitlist-form {
+  max-width: 580px; margin: 0 auto;
+  background: var(--card); border-radius: var(--radius);
+  padding: 48px; box-shadow: var(--shadow-lg);
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { margin-bottom: 16px; }
+.form-group label {
+  display: block; font-size: 0.85rem; font-weight: 600;
+  margin-bottom: 6px; color: var(--text);
+}
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: 12px 16px;
+  border: 2px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 0.95rem; font-family: inherit;
+  transition: border-color 0.2s; background: white;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  outline: none; border-color: var(--primary);
+}
+.form-group .hint { font-size: 0.8rem; color: var(--text-light); margin-top: 4px; }
+.waitlist-form .btn { width: 100%; justify-content: center; margin-top: 8px; font-size: 1.05rem; padding: 16px; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: #10B981; color: white;
+  padding: 16px 32px; border-radius: 12px;
+  font-weight: 600; font-size: 0.95rem;
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+  opacity: 0; transition: all 0.4s ease;
+  z-index: 200;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.error { background: #EF4444; box-shadow: 0 8px 32px rgba(239, 68, 68, 0.3); }
+
+/* Footer */
+footer { border-top: 1px solid var(--border); padding: 40px 0; text-align: center; }
+footer .logo { margin-bottom: 8px; display: block; }
+footer p { font-size: 0.85rem; color: var(--text-soft); }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  .hero h1 { font-size: 2.2rem; }
+  .steps-grid, .gallery-grid, .pricing-grid { grid-template-columns: 1fr; }
+  .pricing-grid { gap: 16px; }
+  .section { padding: 60px 0; }
+  .section h2 { font-size: 1.8rem; }
+  .waitlist-form { padding: 32px 24px; }
+  .form-row { grid-template-columns: 1fr; }
+  .nav-links a:not(.nav-cta) { display: none; }
+  .hero-book { transform: none; }
+  .hero-book:hover { transform: translateY(-4px); }
+  .floating-tag { display: none; }
+  .price-card.featured { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="container">
+    <div class="logo">童梦<span>工坊</span></div>
+    <div class="nav-links">
+      <a href="#how">如何运作</a>
+      <a href="#showcase">作品展示</a>
+      <a href="#pricing">定价</a>
+      <a href="#faq">常见问题</a>
+      <a href="#waitlist" class="nav-cta">加入候补</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <h1>
+          <span class="highlight">每个孩子</span><br>
+          都值得成为故事里的主角
+        </h1>
+        <p class="hero-sub">AI 定制儿童绘本 — 输入孩子的名字和喜好，48 小时内生成一本专属故事绘本。</p>
+        <div class="hero-price">首发尝鲜价 <strong>¥399</strong> <s>¥799</s> · 限量前 50 本</div>
+        <div class="hero-btns">
+          <a href="#waitlist" class="btn btn-primary">立即加入候补</a>
+          <a href="#how" class="btn btn-outline">了解更多</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-book">
+          <div class="hero-book-ornament">✨</div>
+          <h3>小兔子的太空冒险</h3>
+          <div class="meta">献给 · 乐乐 · 4 岁</div>
+          <div class="pages">
+            <div class="page"><span class="icon">🌙</span> 晚安，小兔子乐乐</div>
+            <div class="page"><span class="icon">🚀</span> 乐乐造了一艘火箭</div>
+            <div class="page"><span class="icon">⭐</span> 在月亮上遇到了新朋友</div>
+            <div class="page"><span class="icon">🏠</span> 带着星星回到了家</div>
+          </div>
+        </div>
+        <div class="floating-tag" style="bottom:-10px;left:-30px;">👶 3-8 岁</div>
+        <div class="floating-tag" style="top:20px;right:-20px;">⏱ 48 小时交付</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="section" id="how">
+  <div class="container text-center">
+    <div class="section-label">三步获得专属绘本</div>
+    <h2>简单三步，故事开始</h2>
+    <p class="section-desc">不需要任何设计经验，你只需要提供想法，剩下的交给我们和 AI。</p>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>填写信息</h3>
+        <p>孩子的名字、年龄、喜欢的主题（恐龙/公主/太空/海洋…），以及你想传递的一句话。</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>AI 生成</h3>
+        <p>我们用 AI 创作独一无二的故事文本和插画，每页都经过人工筛选和优化。</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>48 小时交付</h3>
+        <p>PDF 绘本发送到你的邮箱，可以打印、投屏、或放在平板里和孩子一起读。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section class="section section-alt" id="showcase">
+  <div class="container text-center">
+    <div class="section-label">作品展示</div>
+    <h2>每一本都独一无二</h2>
+    <p class="section-desc">来看看我们为其他小朋友创作的绘本故事。</p>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <div class="thumb" style="background:linear-gradient(135deg,#FEF3C7,#FDE68A);">🚀</div>
+        <div class="info">
+          <h4>小兔子的太空冒险</h4>
+          <p>乐乐 · 4 岁 · 太空主题</p>
+          <span class="tag tag-popular">热门</span>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="thumb" style="background:linear-gradient(135deg,#FCE7F3,#FBCFE8);">🦕</div>
+        <div class="info">
+          <h4>恐龙乐园大冒险</h4>
+          <p>小宇 · 5 岁 · 恐龙主题</p>
+          <span class="tag tag-new">新品</span>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="thumb" style="background:linear-gradient(135deg,#DBEAFE,#BFDBFE);">🧜</div>
+        <div class="info">
+          <h4>海洋公主的秘密</h4>
+          <p>朵朵 · 4 岁 · 公主主题</p>
+          <span class="tag tag-top">精选</span>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="thumb" style="background:linear-gradient(135deg,#D1FAE5,#A7F3D0);">🌳</div>
+        <div class="info">
+          <h4>森林里的小勇士</h4>
+          <p>晨晨 · 6 岁 · 冒险主题</p>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="thumb" style="background:linear-gradient(135deg,#EDE9FE,#DDD6FE);">🎪</div>
+        <div class="info">
+          <h4>马戏团奇妙夜</h4>
+          <p>涵涵 · 3 岁 · 动物主题</p>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="thumb" style="background:linear-gradient(135deg,#FEF3C7,#FDE68A);">🎂</div>
+        <div class="info">
+          <h4>我的生日魔法</h4>
+          <p>果果 · 5 岁 · 魔法主题</p>
+          <span class="tag tag-new">新品</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="section" id="pricing">
+  <div class="container text-center">
+    <div class="section-label">透明定价</div>
+    <h2>选择适合你的方案</h2>
+    <p class="section-desc">所有方案均包含故事创作、AI 插画、人工审核优化和 PDF 交付。</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3>标准版</h3>
+        <div class="price">¥399 <span>起</span></div>
+        <div class="price-sub">数字版 PDF · 10 页</div>
+        <ul>
+          <li>定制故事文本</li>
+          <li>AI 生成插画</li>
+          <li>48 小时交付</li>
+          <li>1 次免费修改</li>
+          <li>PDF 格式</li>
+        </ul>
+        <a href="#waitlist" class="btn btn-outline">加入候补</a>
+      </div>
+      <div class="price-card featured">
+        <div class="badge">最受欢迎</div>
+        <h3>精装版</h3>
+        <div class="price">¥699 <span>起</span></div>
+        <div class="price-sub">数字版 + 可打印 · 16 页</div>
+        <ul>
+          <li>更长更丰富的故事</li>
+          <li>精细筛选插画</li>
+          <li>36 小时加急交付</li>
+          <li>3 次免费修改</li>
+          <li>PDF + 打印版</li>
+          <li>附赠朗读音频（AI）</li>
+        </ul>
+        <a href="#waitlist" class="btn btn-primary">加入候补</a>
+      </div>
+      <div class="price-card">
+        <h3>珍藏版</h3>
+        <div class="price">¥1,299 <span>起</span></div>
+        <div class="price-sub">数字版 + 纸质邮寄 · 20 页</div>
+        <ul>
+          <li>超长精装故事</li>
+          <li>人工辅助优化插画</li>
+          <li>24 小时加急交付</li>
+          <li>无限修改直至满意</li>
+          <li>PDF + 纸质书邮寄</li>
+          <li>朗读音频 + 动画预告</li>
+          <li>生日/节日专属礼盒</li>
+        </ul>
+        <a href="#waitlist" class="btn btn-outline">加入候补</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section section-alt" id="faq">
+  <div class="container text-center">
+    <div class="section-label">常见问题</div>
+    <h2>你可能想知道的</h2>
+    <p class="section-desc" style="margin-bottom:32px;"></p>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">
+          适合多大年龄的孩子？
+          <span class="icon">▼</span>
+        </button>
+        <div class="faq-a"><p>我们目前专注于 3-8 岁的儿童。故事词汇和情节长度会根据孩子年龄自动调整，3 岁侧重韵律和画面，6 岁以上会有更丰富的故事线。</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          绘本是什么格式？能打印吗？
+          <span class="icon">▼</span>
+        </button>
+        <div class="faq-a"><p>标准版和精装版交付高清 PDF，适合在 iPad/平板上阅读，也可以在任何打印店打印成实体书。珍藏版包含纸质书邮寄服务。</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          需要等多久才能收到？
+          <span class="icon">▼</span>
+        </button>
+        <div class="faq-a"><p>标准版 48 小时，精装版 36 小时，珍藏版 24 小时交付数字版。珍藏版的纸质书需额外 3-5 天印刷邮寄时间。</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          不满意怎么办？
+          <span class="icon">▼</span>
+        </button>
+        <div class="faq-a"><p>每份订单包含免费修改次数（标准版 1 次，精装版 3 次，珍藏版不限次）。如果修改后仍不满意，我们提供全额退款保障。</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          图片版权归谁？
+          <span class="icon">▼</span>
+        </button>
+        <div class="faq-a"><p>绘本仅供个人和家庭使用，不得用于商业出版或转售。如需商业授权，请联系我们购买商用许可（¥2,999 起）。</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          候补名单是什么意思？要等多久？
+          <span class="icon">▼</span>
+        </button>
+        <div class="faq-a"><p>目前我们处于内测阶段，限量接单以确保质量。加入候补名单后，我们会在 1-3 天内联系你。前 50 名可享首发尝鲜价。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Waitlist -->
+<section class="section" id="waitlist">
+  <div class="container text-center">
+    <div class="section-label">加入候补</div>
+    <h2>抢先体验，限时尝鲜价</h2>
+    <p class="section-desc">前 50 名加入可享 <strong>¥399 首发价</strong>（原价 ¥799）。填写以下信息，我们将在 1-2 天内联系你。</p>
+
+    <div class="waitlist-form" id="waitlistForm">
+      <form id="form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="parentName">你的姓名 *</label>
+            <input type="text" id="parentName" name="parentName" required placeholder="家长姓名">
+          </div>
+          <div class="form-group">
+            <label for="email">邮箱地址 *</label>
+            <input type="email" id="email" name="email" required placeholder="your@email.com">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="childName">孩子姓名 *</label>
+            <input type="text" id="childName" name="childName" required placeholder="宝贝的名字">
+          </div>
+          <div class="form-group">
+            <label for="childAge">孩子年龄 *</label>
+            <input type="number" id="childAge" name="childAge" required min="1" max="12" placeholder="如 4">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="theme">喜欢的主题 *</label>
+          <select id="theme" name="theme" required>
+            <option value="">请选择主题</option>
+            <option value="space">🚀 太空冒险</option>
+            <option value="dinosaur">🦕 恐龙世界</option>
+            <option value="princess">👸 公主童话</option>
+            <option value="ocean">🧜 海洋奇遇</option>
+            <option value="animal">🐾 动物朋友</option>
+            <option value="magic">✨ 魔法学院</option>
+            <option value="nature">🌳 自然探险</option>
+            <option value="other">🎨 其他</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">想对孩子说的话（选填）</label>
+          <textarea id="message" name="message" rows="3" placeholder="比如：希望宝贝永远勇敢善良 🌟"></textarea>
+          <div class="hint">这句话会写在绘本的扉页上</div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="submitBtn">
+          ✨ 加入候补名单
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo" style="font-size:1.1rem;">童梦<span>工坊</span></div>
+    <p>每个孩子都值得成为故事里的主角</p>
+    <p style="margin-top:4px;font-size:0.8rem;color:var(--text-light);">© 2026 童梦工坊 · AI 定制儿童绘本</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Nav scroll effect
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// FAQ accordion
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+// Toast
+function showToast(msg, isError = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isError ? ' error' : '');
+  requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('show')));
+  setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+// Form submission
+const FORM_KEY = 'dreamkids_waitlist';
+const WEBHOOK_URL = ''; // 填入你的 Webhook 地址
+
+document.getElementById('form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '提交中...';
+
+  const data = {
+    parentName: document.getElementById('parentName').value,
+    email: document.getElementById('email').value,
+    childName: document.getElementById('childName').value,
+    childAge: document.getElementById('childAge').value,
+    theme: document.getElementById('theme').value,
+    message: document.getElementById('message').value,
+    timestamp: new Date().toISOString()
+  };
+
+  let submitted = false;
+
+  // 1. 如果有 Webhook，提交到后端
+  if (WEBHOOK_URL) {
+    try {
+      const res = await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (res.ok) submitted = true;
+    } catch {}
+  }
+
+  // 2. 本地存储作为备份（随时可用）
+  const existing = JSON.parse(localStorage.getItem(FORM_KEY) || '[]');
+  existing.push(data);
+  localStorage.setItem(FORM_KEY, JSON.stringify(existing));
+
+  showToast('✅ 恭喜！你已成功加入候补名单，我们会在 1-2 天内联系你！');
+  this.reset();
+  btn.disabled = false;
+  btn.textContent = '✨ 加入候补名单';
+});
+</script>
+</body>
+</html>
