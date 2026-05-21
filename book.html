@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>绘本排版工具 - 小兔子的魔法种子</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Serif SC', serif;
+  background: #F5F0EB;
+  color: #3D2C1A;
+}
+.container { max-width: 800px; margin: 0 auto; padding: 20px; }
+
+/* 控制栏 */
+.toolbar {
+  position: sticky; top: 0; z-index: 100;
+  background: white; border-radius: 16px;
+  padding: 16px 24px; margin-bottom: 24px;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+}
+.toolbar h2 { font-size: 1.1rem; flex: 1; }
+.toolbar button {
+  padding: 10px 24px; border: none; border-radius: 100px;
+  font-size: 0.95rem; font-weight: 700; cursor: pointer;
+  font-family: inherit;
+}
+.btn-primary { background: #7C3AED; color: white; }
+.btn-primary:hover { background: #6D28D9; }
+.btn-outline { background: transparent; border: 2px solid #D1D5DB !important; }
+.hint { font-size: 0.8rem; color: #9CA3AF; }
+.hint code { background: #F3F4F6; padding: 2px 8px; border-radius: 4px; }
+
+/* 页 */
+.page {
+  background: white; border-radius: 20px;
+  margin-bottom: 20px; padding: 32px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  page-break-after: always;
+  min-height: 600px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 32px; align-items: center;
+}
+.page.full { grid-template-columns: 1fr; text-align: center; }
+.page-image {
+  aspect-ratio: 4/3; border-radius: 12px;
+  background: #F9F5F0;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+.page-image img {
+  width: 100%; height: 100%; object-fit: cover;
+  display: none;
+}
+.page-image .placeholder {
+  color: #D1C4B5; font-size: 3rem;
+}
+.page-image.has-image .placeholder { display: none; }
+.page-image.has-image img { display: block; }
+.page-text { padding: 20px 0; }
+.page-number {
+  font-size: 0.8rem; color: #D1C4B5; margin-bottom: 8px;
+}
+.page-text p {
+  font-size: 1.3rem; line-height: 1.8;
+  color: #3D2C1A;
+}
+
+/* 封面 */
+.cover {
+  background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+  text-align: center; padding: 60px 32px;
+}
+.cover h1 { font-size: 2.8rem; margin-bottom: 8px; }
+.cover .subtitle { font-size: 1.2rem; color: #92400E; margin-bottom: 40px; }
+.cover .meta { font-size: 0.9rem; color: #A16207; }
+
+/* 上传区 */
+.upload-zone {
+  border: 3px dashed #D1D5DB; border-radius: 16px;
+  padding: 40px; text-align: center; margin: 20px 0;
+  cursor: pointer; transition: all 0.3s;
+}
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: #7C3AED; background: #F5F0FF;
+}
+.upload-zone p { font-size: 1rem; color: #6B7280; }
+.upload-zone .icon { font-size: 2.5rem; margin-bottom: 12px; }
+
+/* 打印样式 */
+@media print {
+  .toolbar, .upload-zone, .no-print { display: none !important; }
+  .page { box-shadow: none; border-radius: 0; margin: 0; padding: 24px; min-height: auto; page-break-after: always; }
+  body { background: white; }
+}
+
+/* 手机 */
+@media (max-width: 640px) {
+  .page { grid-template-columns: 1fr; padding: 20px; }
+  .page-text p { font-size: 1.1rem; }
+  .cover h1 { font-size: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="toolbar no-print">
+    <h2>📖 绘本排版工具</h2>
+    <span class="hint">上传图片后 <code>Ctrl+P</code> 打印为 PDF</span>
+    <button class="btn btn-primary" onclick="window.print()">🖨️ 导出 PDF</button>
+    <button class="btn btn-outline" onclick="resetImages()">清空图片</button>
+  </div>
+
+  <div class="upload-zone no-print" id="uploadZone">
+    <div class="icon">🖼️</div>
+    <p><strong>上传 10 张内页图片</strong><br>按顺序对应第 1-10 页（封面不需要上传）</p>
+    <input type="file" accept="image/*" multiple id="fileInput" style="display:none">
+  </div>
+
+  <!-- 封面 -->
+  <div class="page full cover" id="page-1">
+    <div>
+      <h1>小兔子的魔法种子</h1>
+      <p class="subtitle">一个关于成长、等待与分享的故事</p>
+      <div class="page-image" data-page="1">
+        <div class="placeholder">📖</div>
+        <img alt="封面">
+      </div>
+      <p class="meta" style="margin-top:24px;">献给每一个心中有爱的小朋友</p>
+    </div>
+  </div>
+
+  <!-- 内页 第1-10页 -->
+  <div class="page" id="page-2">
+    <div class="page-image" data-page="2">
+      <div class="placeholder">🌅</div><img alt="第1页">
+    </div>
+    <div class="page-text">
+      <div class="page-number">第 1 页</div>
+      <p>一个春天的早晨，小兔子在森林里发现了一颗闪着光的种子。</p>
+    </div>
+  </div>
+
+  <div class="page" id="page-3">
+    <div class="page-image" data-page="3">
+      <div class="placeholder">🌱</div><img alt="第2页">
+    </div>
+    <div class="page-text">
+      <div class="page-number">第 2 页</div>
+      <p>"我要把它种下去！"小兔子小心翼翼地把种子埋进土里。</p>
+    </div>
+  </div>
+
+  <div class="page" id="page-4">
+    <div class="page-image" data-page="4">
+      <div class="placeholder">⏰</div><img alt="第3页">
+    </div>
+    <div class="page-text">
+      <div class="page-number">第 3 页</div>
+      <p>一分钟，两分钟，一个小时……土地里静悄悄的。</p>
+    </div>
+  </div>
+
+  <div class="page" id="page-5">
+    <div class="page-image" data-page="5">
+      <div class="placeholder">💧</div><img alt="第4页">
+    </div>
+    <div class="page-text">
+      <div class="page-number">第 4 页</div>
+      <p>小兔子每天给它浇水，陪它说话，从不偷懒。</p>
+    </div>
+  </div>
+
+  <div class="page" id="page-6">
+    <div class="page-image" data-page="6">
+      <div class="placeholder">🌿</div><img alt="第5页">
+    </div>
+    <div class="page-text">
+      <div class="page-number">第 5 页</div>
+      <p>在一个洒满露珠的早晨，奇迹终于发生了！</p>
+    </div>
+  </div>
+
+  <div class="page" id="page-7">
+    <div class="page-image" data-page="7">
+      <div class="placeholder">🌙</div><img alt="第6页">
+    </div>
+    <div class="page-text">
+      <div class="page-number">第 6 页</div>
+      <p>到了夜里，种子在月光下越长越快，越长越高……</p>
+    </div>
+  </div>
+
+  <div class="page" id="page-8">
+    <div class="page-image" data-page="8">
+      <div class="placeholder">🍎</div><img alt="第7页">
+    </div>
+    <div class="page-text">
+      <div class="page-number">第 7 页</div>
+      <p>哇！这竟然是一棵结满各种美味的神奇果树！</p>
+    </div>
+  </div>
+
+  <div class="page" id="page-9">
+    <div class="page-image" data-page="9">
+      <div class="placeholder">🎁</div><img alt="第8页">
+    </div>
+    <div class="page-text">
+      <div class="page-number">第 8 页</div>
+      <p>小兔子把果实分给了每一个小伙伴，大家都开心极了。</p>
+    </div>
+  </div>
+
+  <div class="page" id="page-10">
+    <div class="page-image" data-page="10">
+      <div class="placeholder">🎉</div><img alt="第9页">
+    </div>
+    <div class="page-text">
+      <div class="page-number">第 9 页</div>
+      <p>那一晚，小兔子收到了一份比魔法更珍贵的礼物——友谊和快乐。</p>
+    </div>
+  </div>
+
+  <div class="page" id="page-11">
+    <div class="page-image" data-page="11">
+      <div class="placeholder">🌟</div><img alt="第10页">
+    </div>
+    <div class="page-text">
+      <div class="page-number">第 10 页</div>
+      <p>只要心中有爱，下一颗魔法种子，就在你的手心里。</p>
+    </div>
+  </div>
+
+  <div class="page full cover" id="page-12" style="background:linear-gradient(135deg,#EDE9FE,#DDD6FE);">
+    <div>
+      <p style="font-size:1.5rem;margin-bottom:20px;">— 完 —</p>
+      <p style="margin-top:40px;font-size:0.9rem;color:#6D28D9;">童梦工坊 · AI 定制绘本</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const fileInput = document.getElementById('fileInput');
+const uploadZone = document.getElementById('uploadZone');
+const totalImages = 10; // 10 页内页图片
+
+uploadZone.addEventListener('click', () => fileInput.click());
+
+uploadZone.addEventListener('dragover', e => {
+  e.preventDefault();
+  uploadZone.classList.add('dragover');
+});
+uploadZone.addEventListener('dragleave', () => {
+  uploadZone.classList.remove('dragover');
+});
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('dragover');
+  handleFiles(e.dataTransfer.files);
+});
+
+fileInput.addEventListener('change', e => {
+  handleFiles(e.target.files);
+});
+
+function handleFiles(files) {
+  const validFiles = [];
+  for (let f of files) {
+    if (f.type.startsWith('image/')) validFiles.push(f);
+  }
+  if (validFiles.length === 0) {
+    alert('请选择图片文件');
+    return;
+  }
+
+  const images = document.querySelectorAll('.page-image');
+  // 跳过封面(索引0)，从第2个(索引1)开始放内页
+  const startIndex = 1;
+  const count = Math.min(validFiles.length, images.length - startIndex);
+
+  for (let i = 0; i < count; i++) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = images[startIndex + i].querySelector('img');
+      img.src = e.target.result;
+      images[startIndex + i].classList.add('has-image');
+    };
+    reader.readAsDataURL(validFiles[i]);
+  }
+
+  if (validFiles.length < totalImages) {
+    alert(`已放入 ${count} 张图片，还需要 ${totalImages - count} 张可继续上传`);
+  } else {
+    uploadZone.innerHTML = '<div class="icon">✅</div><p><strong>所有图片已就位！</strong><br>点击上方"导出 PDF"或按 Ctrl+P</p>';
+  }
+}
+
+function resetImages() {
+  document.querySelectorAll('.page-image').forEach(el => {
+    el.classList.remove('has-image');
+    el.querySelector('img').src = '';
+  });
+  location.reload();
+}
+</script>
+</body>
+</html>
